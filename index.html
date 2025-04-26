@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Happy Birthday Ashrita!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #fff;
+      margin: 0;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    h2 {
+      font-size: 2.5em;
+      margin-top: 10px;
+      background: linear-gradient(90deg, #ffe259, #ffa751);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: sparkle 1.5s infinite alternate;
+    }
+
+    @keyframes sparkle {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(2); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .balloon {
+      width: 60px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 30%, #ff9999, #ff4d4d);
+      border-radius: 50% 50% 50% 50%;
+      position: absolute;
+      bottom: -100px;
+      animation: riseBalloon 10s linear infinite;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background: #333;
+      transform: translateX(-50%);
+    }
+
+    @keyframes riseBalloon {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Happy Birthday 🎉</h1>
+  <h2>Ashrita ✨</h2>
+
+  <canvas id="confetti"></canvas>
+
+  <!-- Balloons -->
+  <div class="balloon" style="left: 20%; animation-delay: 0s;"></div>
+  <div class="balloon" style="left: 40%; animation-delay: 2s; background: radial-gradient(circle at 30% 30%, #99ccff, #3399ff);"></div>
+  <div class="balloon" style="left: 60%; animation-delay: 4s; background: radial-gradient(circle at 30% 30%, #99ffcc, #33cc99);"></div>
+  <div class="balloon" style="left: 80%; animation-delay: 6s; background: radial-gradient(circle at 30% 30%, #ffcc99, #ff9933);"></div>
+
+  <!-- Birthday Music -->
+  <audio autoplay loop>
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/BirthdaySong.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Confetti animation
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const pieces = [];
+    const numberOfPieces = 200;
+
+    for (let i = 0; i < numberOfPieces; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 5 + 2,
+        speed: Math.random() * 3 + 1,
+        color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+        tilt: Math.random() * 10 - 10
+      });
+    }
+
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < pieces.length; i++) {
+        const p = pieces[i];
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+        p.y += p.speed;
+        p.x += Math.sin(p.tilt);
+
+        if (p.y > canvas.height) {
+          p.y = 0 - p.size;
+          p.x = Math.random() * canvas.width;
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    update();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Balloon pop simulation (simple scale + opacity animation)
+    const balloons = document.querySelectorAll('.balloon');
+    balloons.forEach(balloon => {
+      balloon.addEventListener('click', () => {
+        balloon.style.transition = 'all 0.5s ease';
+        balloon.style.transform = 'scale(0)';
+        balloon.style.opacity = '0';
+      });
+    });
+  </script>
+
+</body>
+</html>
+
